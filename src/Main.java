@@ -19,59 +19,45 @@ public class Main {
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
         }
-
+        int safe = 0;
+        boolean increase;
+        int tempSafe = 0;
         List<int[][]> listDamp = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             int[][] damp = new int[list.get(i).length + 1][list.get(i).length - 1];
             damp[0] = list.get(i);
-            for (int j = 0; j < list.get(i).length; j++) {
+            for (int l = 0; l < list.get(i).length; l++) {
                 int finalI = i;
-                int finalJ = j;
+                int finalJ = l;
+                tempSafe = 0;
                 int[] tempList = Arrays.stream(list.get(i))
                         .filter(a -> a != list.get(finalI)[finalJ])
                         .toArray();
-                damp[j + 1] = tempList;
-            }
-            listDamp.add(damp);
-        }
-        int safe = 0;
-        boolean increase;
-        boolean help = false;
-        for (int[] ints : list) {
-            increase = ints[0] < ints[1];
-            for (int j = 0; j < ints.length - 1; j++) {
-                if (increase && ints[j] >= ints[j + 1]) {
-                    if (!help) {
-                        increase = false;
-                        help = true;
-                    }
-                    else{
-                        safe--;
+                System.out.println(Arrays.toString(tempList));
+                increase = tempList[0] < tempList[1];
+                for (int j = 0; j < tempList.length - 1; j++) {
+                    if (increase && tempList[j] >= tempList[j + 1]) {
+                        tempSafe--;
                         break;
+
+                    }else if (!increase && tempList[j] <= tempList[j + 1]) {
+
+                        tempSafe--;
+                        break;
+
                     }
-                }else if (!increase && ints[j] <= ints[j + 1]) {
-                    if (!help) {
-                        increase = true;
-                        help = true;
-                    }
-                    else{
-                        safe--;
+                    if (Math.abs(tempList[j] - tempList[j + 1]) < 1 || Math.abs(tempList[j] - tempList[j + 1]) > 3) {
+                        tempSafe--;
                         break;
                     }
                 }
-                if (Math.abs(ints[j] - ints[j + 1]) < 1 || Math.abs(ints[j] - ints[j + 1]) > 3) {
-                    if (!help) {
-                        help = true;
-                    }
-                    else{
-                        safe--;
-                        break;
-                    }
-                }
+                tempSafe++;
             }
-            help = false;
-            safe++;
+            if (tempSafe > 0) {
+                safe++;
+            }
         }
+
         System.out.println(safe);
     }
 }
