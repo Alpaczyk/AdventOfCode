@@ -36,13 +36,27 @@ public class Main {
         }
         int safe = 0;
         boolean increase;
+        boolean increase2;
         boolean help = false;
+        boolean change;
+        boolean change2;
         for (int[] ints : list) {
             increase = ints[0] < ints[1];
+            increase2 = ints[1] < ints[2];
+            change = Math.abs(ints[0] - ints[1]) < 1 || Math.abs(ints[0] - ints[1]) > 3;
+            change2 = Math.abs(ints[1] - ints[2]) < 1 || Math.abs(ints[1] - ints[2]) > 3;
+            if(increase != increase2) {
+                increase = increase2;
+                help = true;
+                remove(ints, 0);
+            }
+            if(change && !change2) {
+                help = true;
+                remove(ints,0);
+            }
             for (int j = 0; j < ints.length - 1; j++) {
                 if (increase && ints[j] >= ints[j + 1]) {
                     if (!help) {
-                        increase = false;
                         help = true;
                         ints = remove(ints, j+1);
                     }
@@ -52,7 +66,6 @@ public class Main {
                     }
                 }else if (!increase && ints[j] <= ints[j + 1]) {
                     if (!help) {
-                        increase = true;
                         help = true;
                         ints = remove(ints, j+1);
                     }
@@ -61,14 +74,16 @@ public class Main {
                         break;
                     }
                 }
-                if (Math.abs(ints[j] - ints[j + 1]) < 1 || Math.abs(ints[j] - ints[j + 1]) > 3) {
-                    if (!help) {
-                        help = true;
-                        ints = remove(ints, j+1);
-                    }
-                    else{
-                        safe--;
-                        break;
+                if(j + 1 < ints.length){
+                    if (Math.abs(ints[j] - ints[j + 1]) < 1 || Math.abs(ints[j] - ints[j + 1]) > 3) {
+                        if (!help) {
+                            help = true;
+                            ints = remove(ints, j+1);
+                        }
+                        else{
+                            safe--;
+                            break;
+                        }
                     }
                 }
             }
