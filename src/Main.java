@@ -36,25 +36,40 @@ public class Main {
         }
         int safe = 0;
         boolean increase;
-
-        for (int i = 0; i < list.size(); i++) {
-            increase = list.get(i)[0] < list.get(i)[1];
-            for (int j = 0; j < list.get(i).length - 1; j++) {
-                if (increase && list.get(i)[j] >= list.get(i)[j + 1]) {
-                    System.out.println(i);
-                    safe--;
-                    break;
-                } else if (!increase && list.get(i)[j] <= list.get(i)[j + 1]) {
-                    System.out.println(i);
-                    safe--;
-                    break;
+        boolean help = false;
+        for (int[] ints : list) {
+            increase = ints[0] < ints[1];
+            for (int j = 0; j < ints.length - 1; j++) {
+                if (increase && ints[j] >= ints[j + 1]) {
+                    if (!help) {
+                        increase = false;
+                        help = true;
+                    }
+                    else{
+                        safe--;
+                        break;
+                    }
+                }else if (!increase && ints[j] <= ints[j + 1]) {
+                    if (!help) {
+                        increase = true;
+                        help = true;
+                    }
+                    else{
+                        safe--;
+                        break;
+                    }
                 }
-                if (Math.abs(list.get(i)[j] - list.get(i)[j + 1]) < 1 || Math.abs(list.get(i)[j] - list.get(i)[j + 1]) > 3) {
-                    System.out.println(i);
-                    safe--;
-                    break;
+                if (Math.abs(ints[j] - ints[j + 1]) < 1 || Math.abs(ints[j] - ints[j + 1]) > 3) {
+                    if (!help) {
+                        help = true;
+                    }
+                    else{
+                        safe--;
+                        break;
+                    }
                 }
             }
+            help = false;
             safe++;
         }
         System.out.println(safe);
